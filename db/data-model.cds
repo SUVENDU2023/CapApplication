@@ -18,7 +18,16 @@ entity Employees {
       j_type      : String(100);
       gender      : String(100);
       age         : String(100);
-      city : String(100);
+      city        : String(100);
+  };
+  entity Badgebytes {
+  key ID          : Integer;
+      f_name      : String(100);
+      l_name      : String(100);
+      j_type      : String(100);
+      gender      : String(100);
+      age         : String(100);
+      city        : String(100);
   };
 
 
