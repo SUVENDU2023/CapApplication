@@ -1,7 +1,94 @@
 <mvc:View controllerName="emp.employeedetail.controller.EmployeeDashboard"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
+    xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:core="sap.ui.core">
     <Page id="page" title="{i18n>title}">
-        <content />
-    </Page>
+        <content>
+            <Text text="{prefProviderModel>/0/serviceName} @ {prefProviderModel>/0/phoneno}"></Text>
+            <HBox>
+                <ComboBox id="comboBoxId" selectionChange="onSearchTravelDetails" placeholder="Employee ID" class="sapUiSmallMarginBegin" items="{employeemodel>/Employees}">
+                    <items>
+                    <core:Item text="{employeemodel>ID}" />
+                    </items>
+                </ComboBox>
+                <SearchField 
+                    id="searchid"
+                    width="20rem" 
+                    class="sapUiSmallMarginBegin"
+                    search="onSearchTravelDetails"/>
+                    <DatePicker placeholder="onTimeDialogopen" change="onTimeDialogopen"></DatePicker>
+                    <Button text="time" press="onTimeDialogopen"></Button>
+                    <Input ></Input>
+            <TimePickerSliders
+              id="TPert2"
+              valueFormat="HH:mm:ss"
+              displayFormat="HH:mm:ss"
+              change="handleChange"
+              height= "400px"
+              />
+            </HBox>
+            <HBox id="timeBox">
+            </HBox>
+            <Table id="tableId" items="{employeemodel>/Employees}">
+        <columns>
+          <Column>
+            <Text text="FirstName" />
+          </Column>
+          <Column>
+            <Text text="LastName" />
+          </Column>
+          <Column>
+            <Text text="Age" />
+          </Column>
+            <Column>
+            <Text text="Gender" />
+          </Column>
+           <Column>
+            <Text text="JOB Type" />
+          </Column>
+           <Column>
+            <Text text="City" />
+          </Column>
+        </columns>
+        <items>
+          <ColumnListItem type="Navigation"
+            press="onClickRow">
+          
+            <cells>
+              <Text text="{employeemodel>f_name}" />
+           
+            </cells>
+              <cells>
+              <Text text="{employeemodel>l_name}" />
+             
+            </cells>
+              <cells>
+              <Text text="{employeemodel>age}" />
+             
+            </cells>
+              <cells>
+              <Text text="{employeemodel>gender}" />
+             
+            </cells>
+              <cells>
+              <Text text="{employeemodel>j_type}" />
+             
+            </cells>
+            <cells>
+              <Text text="{employeemodel>city}" />
+             
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+      
+        </content>
+        
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button text="NEXT" type="Default"  press="onTravelcancelpress"/>
+            </OverflowToolbar>
+      </footer>
+  </Page>
 </mvc:View>

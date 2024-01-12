@@ -21,3 +21,6 @@ _out
 .DS_Store
 # added by cds
 .cdsrc-private.json
+
+# added by cds
+.cdsrc-private.json
