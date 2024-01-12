@@ -77,8 +77,8 @@ service CatalogService @(path : '/catalog')
                    }]) 
       as projection on db.Employees;
 
-    @readonly
-    entity Badgebytes as projection on db.Badgebytes;
+    // @readonly
+    // entity Badgebytes as projection on db.Badgebytes;
 
 
 
