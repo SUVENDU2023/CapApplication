@@ -19,3 +19,5 @@ _out
 .che/
 .gen/
 .DS_Store
+# added by cds
+.cdsrc-private.json

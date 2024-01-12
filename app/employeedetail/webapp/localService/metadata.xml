@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CatalogService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Sales" EntityType="CatalogService.Sales"/>
+                <EntitySet Name="VSales" EntityType="CatalogService.VSales"/>
+                <EntitySet Name="SessionInfo" EntityType="CatalogService.SessionInfo"/>
+                <EntitySet Name="SalesOrders" EntityType="CatalogService.SalesOrders"/>
+                <EntitySet Name="Employees" EntityType="CatalogService.Employees"/>
+                <EntitySet Name="Badgebytes" EntityType="CatalogService.Badgebytes"/>
+                <FunctionImport Name="topSales" Function="CatalogService.topSales" EntitySet="Sales"/>
+                <FunctionImport Name="userInfo" Function="CatalogService.userInfo"/>
+            </EntityContainer>
+            <EntityType Name="Sales">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="region" Type="Edm.String" MaxLength="100"/>
+                <Property Name="country" Type="Edm.String" MaxLength="100"/>
+                <Property Name="org" Type="Edm.String" MaxLength="4"/>
+                <Property Name="amount" Type="Edm.Int32"/>
+                <Property Name="comments" Type="Edm.String" MaxLength="100"/>
+                <Property Name="criticality" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="VSales">
+                <Key>
+                    <PropertyRef Name="REGION"/>
+                </Key>
+                <Property Name="REGION" Type="Edm.String" MaxLength="100" Nullable="false"/>
+                <Property Name="AMOUNT" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="SessionInfo">
+                <Key>
+                    <PropertyRef Name="ITEM"/>
+                </Key>
+                <Property Name="ITEM" Type="Edm.String" MaxLength="5000" Nullable="false"/>
+                <Property Name="VALUE" Type="Edm.String" MaxLength="5000"/>
+            </EntityType>
+            <EntityType Name="SalesOrders">
+                <Key>
+                    <PropertyRef Name="SalesOrder"/>
+                </Key>
+                <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="SalesOrganization" Type="Edm.String" MaxLength="4"/>
+                <Property Name="DistributionChannel" Type="Edm.String" MaxLength="2"/>
+                <Property Name="SoldToParty" Type="Edm.String" MaxLength="10"/>
+                <Property Name="IncotermsLocation1" Type="Edm.String" MaxLength="70"/>
+                <Property Name="TotalNetAmount" Type="Edm.Decimal" Scale="3" Precision="16"/>
+                <Property Name="TransactionCurrency" Type="Edm.String" MaxLength="5"/>
+            </EntityType>
+            <EntityType Name="Employees">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="f_name" Type="Edm.String" MaxLength="100"/>
+                <Property Name="l_name" Type="Edm.String" MaxLength="100"/>
+                <Property Name="j_type" Type="Edm.String" MaxLength="100"/>
+                <Property Name="gender" Type="Edm.String" MaxLength="100"/>
+                <Property Name="age" Type="Edm.String" MaxLength="100"/>
+                <Property Name="city" Type="Edm.String" MaxLength="100"/>
+            </EntityType>
+            <EntityType Name="Badgebytes">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="f_name" Type="Edm.String" MaxLength="100"/>
+                <Property Name="l_name" Type="Edm.String" MaxLength="100"/>
+                <Property Name="j_type" Type="Edm.String" MaxLength="100"/>
+                <Property Name="gender" Type="Edm.String" MaxLength="100"/>
+                <Property Name="age" Type="Edm.String" MaxLength="100"/>
+                <Property Name="city" Type="Edm.String" MaxLength="100"/>
+            </EntityType>
+            <ComplexType Name="userScopes">
+                <Property Name="identified" Type="Edm.Boolean"/>
+                <Property Name="authenticated" Type="Edm.Boolean"/>
+                <Property Name="Viewer" Type="Edm.Boolean"/>
+                <Property Name="Admin" Type="Edm.Boolean"/>
+            </ComplexType>
+            <ComplexType Name="userType">
+                <Property Name="user" Type="Edm.String"/>
+                <Property Name="locale" Type="Edm.String"/>
+                <Property Name="scopes" Type="CatalogService.userScopes"/>
+            </ComplexType>
+            <Function Name="largestOrder" IsBound="true" IsComposable="false">
+                <Parameter Name="in" Type="CatalogService.Sales"/>
+                <ReturnType Type="Edm.String"/>
+            </Function>
+            <Action Name="boost" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CatalogService.Sales"/>
+                <ReturnType Type="CatalogService.Sales"/>
+            </Action>
+            <Function Name="topSales" IsBound="false" IsComposable="false">
+                <Parameter Name="amount" Type="Edm.Int32"/>
+                <ReturnType Type="Collection(CatalogService.Sales)" Nullable="false"/>
+            </Function>
+            <Function Name="userInfo" IsBound="false" IsComposable="false">
+                <ReturnType Type="CatalogService.userType"/>
+            </Function>
+            <Annotations Target="CatalogService.Sales">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="country"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="ID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="region"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="country"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="amount"/>
+                            <PropertyValue Property="Criticality" Path="criticality"/>
+                        </Record>
+                        <Record Type="UI.DataFieldForAction">
+                            <PropertyValue Property="Label" String="{i18n>boost}"/>
+                                <PropertyValue Property="Action" String="CatalogService.boost"/>
+                                <PropertyValue Property="Inline" Bool="true"/>
+                            </Record>
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="comments"/>
+                            </Record>
+                        </Collection>
+                    </Annotation>
+                    <Annotation Term="UI.HeaderInfo">
+                        <Record Type="UI.HeaderInfoType">
+                            <PropertyValue Property="TypeName" String="{i18n>country}"/>
+                                <PropertyValue Property="TypeNamePlural" String="{i18n>countries}"/>
+                                    <PropertyValue Property="Title">
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="country"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="Description">
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="ID"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Annotation>
+                        </Annotations>
+                        <Annotations Target="CatalogService.Sales/ID">
+                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                            <Annotation Term="Common.Label" String="{i18n>ID}"/>
+                            </Annotations>
+                            <Annotations Target="CatalogService.Sales/region">
+                                <Annotation Term="Common.Label" String="{i18n>region}"/>
+                                </Annotations>
+                                <Annotations Target="CatalogService.Sales/country">
+                                    <Annotation Term="Common.Label" String="{i18n>country}"/>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.Sales/amount">
+                                        <Annotation Term="Common.Label" String="{i18n>amount}"/>
+                                        </Annotations>
+                                        <Annotations Target="CatalogService.Sales/comments">
+                                            <Annotation Term="Common.Label" String="{i18n>comments}"/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.EntityContainer/VSales">
+                                                <Annotation Term="Capabilities.DeleteRestrictions">
+                                                    <Record Type="Capabilities.DeleteRestrictionsType">
+                                                        <PropertyValue Property="Deletable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.InsertRestrictions">
+                                                    <Record Type="Capabilities.InsertRestrictionsType">
+                                                        <PropertyValue Property="Insertable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.UpdateRestrictions">
+                                                    <Record Type="Capabilities.UpdateRestrictionsType">
+                                                        <PropertyValue Property="Updatable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.EntityContainer/SessionInfo">
+                                                <Annotation Term="Capabilities.DeleteRestrictions">
+                                                    <Record Type="Capabilities.DeleteRestrictionsType">
+                                                        <PropertyValue Property="Deletable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.InsertRestrictions">
+                                                    <Record Type="Capabilities.InsertRestrictionsType">
+                                                        <PropertyValue Property="Insertable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.UpdateRestrictions">
+                                                    <Record Type="Capabilities.UpdateRestrictionsType">
+                                                        <PropertyValue Property="Updatable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.EntityContainer/SalesOrders">
+                                                <Annotation Term="Capabilities.DeleteRestrictions">
+                                                    <Record Type="Capabilities.DeleteRestrictionsType">
+                                                        <PropertyValue Property="Deletable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.InsertRestrictions">
+                                                    <Record Type="Capabilities.InsertRestrictionsType">
+                                                        <PropertyValue Property="Insertable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.UpdateRestrictions">
+                                                    <Record Type="Capabilities.UpdateRestrictionsType">
+                                                        <PropertyValue Property="Updatable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.SalesOrders/SalesOrganization">
+                                                <Annotation Term="Core.Description" String="An organizational unit responsible for the sale of certain products or services. The responsibility of a sales organization may include legal liability for products and customer claims.&#xA;&#xA;You can assign any number of distribution channels and divisions to a sales organization. A particular combination of sales organization, distribution channel, and division is known as a sales area."/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.SalesOrders/DistributionChannel">
+                                                <Annotation Term="Core.Description" String="The way in which products or services reach the customer. Typical examples of distribution channels are wholesale, retail, or direct sales.&#xA;&#xA;You can maintain information about customers and materials by sales organization and distribution channel. Within a sales organization you can deliver goods to a given customer through more than one distribution channel.You can assign a distribution channel to one or more sales organizations. If, for example, you have numerous sales organizations, each sales organization may use the &amp;quot;Wholesale&amp;quot; distribution channel.For each combination of sales organization and distribution channel, you can further assign one or more of the divisions that are defined for the sales organization. You can, for example, assign &amp;quot;Food&amp;quot; and &amp;quot;Non-food&amp;quot; divisions to the &amp;quot;Wholesale&amp;quot; distribution channel. A particular combination of sales organization, distribution channel, and division is known as a sales area."/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.SalesOrders/SoldToParty">
+                                                <Annotation Term="Core.Description" String="The customer who orders the goods or services. The sold-to party is contractually responsible for sales orders."/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.SalesOrders/IncotermsLocation1">
+                                                <Annotation Term="Core.Description" String="Provides additional information for the primary Incoterm. For Incoterms 2010, this field represents:&#xA;&#xA;1. For sea and inland waterway transport - Port of Shipment2. For any mode of transport - Place of Delivery 2010Incoterms are divided as follows:Group 1: Rules for any mode or modes of transport (including by vessel)Incoterms Incoterms Description Location 1 EXW Ex Works Place of DeliveryFCA Free Carrier Place of DeliveryCPT Carriage Paid To Place of DestinationCIP Carriage &amp; Insurance Paid To Place of DestinationDAF Delivered at Frontier Place of DeliveryDDP Delivered Duty Paid Place of DestinationDDU Delivered Duty Unpaid Place of DestinationGroup 2: Rules for sea and inland waterwaysIncoterms Incoterms Description Location 1 FAS Free Alongside Ship Port of ShipmentFOB Free On Board Port of ShipmentCFR Cost &amp; Freight Port of DestinationCIF Cost Insurance &amp; Freight Port of DestinationDEQ Delivered Eq Quay (Duty Paid) Port of DestinationDES Delivered Ex Ship Port of DestinationIf the primary incoterm is specified as FOB “Free on Board”, the second field provides details of the port from which the delivery leaves, such as FOB Boston."/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.SalesOrders/TotalNetAmount">
+                                                <Annotation Term="Core.Description" String="The total value of all items in the sales document, after any discounts and surcharges are taken into account. The value is expressed in the document currency."/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.SalesOrders/TransactionCurrency">
+                                                <Annotation Term="Core.Description" String="The currency that applies to the document (for example, to a sales order or an invoice).&#xA;&#xA;The system proposes the document currency from the customer master record of the sold-to party. You can change the currency manually in the document. If you change the currency, the system recalculates prices for the entire document."/>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.EntityContainer/Employees">
+                                                <Annotation Term="Capabilities.DeleteRestrictions">
+                                                    <Record Type="Capabilities.DeleteRestrictionsType">
+                                                        <PropertyValue Property="Deletable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.InsertRestrictions">
+                                                    <Record Type="Capabilities.InsertRestrictionsType">
+                                                        <PropertyValue Property="Insertable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.UpdateRestrictions">
+                                                    <Record Type="Capabilities.UpdateRestrictionsType">
+                                                        <PropertyValue Property="Updatable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                            </Annotations>
+                                            <Annotations Target="CatalogService.EntityContainer/Badgebytes">
+                                                <Annotation Term="Capabilities.DeleteRestrictions">
+                                                    <Record Type="Capabilities.DeleteRestrictionsType">
+                                                        <PropertyValue Property="Deletable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.InsertRestrictions">
+                                                    <Record Type="Capabilities.InsertRestrictionsType">
+                                                        <PropertyValue Property="Insertable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                                <Annotation Term="Capabilities.UpdateRestrictions">
+                                                    <Record Type="Capabilities.UpdateRestrictionsType">
+                                                        <PropertyValue Property="Updatable" Bool="false"/>
+                                                    </Record>
+                                                </Annotation>
+                                            </Annotations>
+                                        </Schema>
+                                    </edmx:DataServices>
+                                </edmx:Edmx>

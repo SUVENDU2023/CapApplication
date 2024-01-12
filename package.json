@@ -1,125 +1,126 @@
 {
-  "name": "CapApplication",
-  "version": "0.0.1",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "description": "Business Application",
-  "engines": {
-    "node": "^18"
-  },
-  "dependencies": {
-    "@sap/cds": "^6.8",
-    "@sap/audit-logging": "5.7.1",
-    "hdb": "^0.19",
-
-    "@sap-cloud-sdk/http-client": "latest",
-    "@sap/xsenv": "^3",
-    "@sap/xssec": "^3",
-    "passport": "^0.4.1",
-
-    "debug": "^4.3",
-    "express": "^4"
-  },
-  "devDependencies": {
-    "@sap/ux-specification": "^1.96.4"
-  },
-  "sapux": [
-    "app/resources/fiori"
-  ],
-  "scripts": {
-    "start": "cds run"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "CapApplication",
+    "version": "0.0.1",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "description": "Business Application",
+    "engines": {
+        "node": "^18"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "dependencies": {
+        "@sap-cloud-sdk/http-client": "latest",
+        "@sap/audit-logging": "5.7.1",
+        "@sap/cds": "^6.8",
+        "@sap/xsenv": "^3",
+        "@sap/xssec": "^3",
+        "debug": "^4.3",
+        "express": "^4",
+        "hdb": "^0.19",
+        "passport": "^0.4.1"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "cds": {
-    "requires": {
-      "uaa": {
-        "kind": "xsuaa"
-      },
-      "auth": {
-        "[production]": {
-          "strategy": "JWT"
+    "devDependencies": {
+        "@sap/ux-specification": "^1.120.1",
+        "rimraf": "^3.0.2"
+    },
+    "sapux": [
+        "app/resources/fiori"
+    ],
+    "scripts": {
+        "start": "cds run",
+        "watch-employeedetail": "cds watch --open employeedetail/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy CapApplication --delete-services --delete-service-keys --delete-service-brokers",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
         },
-        "[development]": {
-          "strategy": "mock",
-          "users": {
-            "joe": {
-              "roles": [
-                "Admin",
-                "Viewer"
-              ]
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
+        }
+    },
+    "cds": {
+        "requires": {
+            "uaa": {
+                "kind": "xsuaa"
             },
-            "julie": {
-              "roles": [
-                "Viewer"
-              ]
+            "auth": {
+                "[production]": {
+                    "strategy": "JWT"
+                },
+                "[development]": {
+                    "strategy": "mock",
+                    "users": {
+                        "joe": {
+                            "roles": [
+                                "Admin",
+                                "Viewer"
+                            ]
+                        },
+                        "julie": {
+                            "roles": [
+                                "Viewer"
+                            ]
+                        },
+                        "bob": {
+                            "roles": [
+                                "Viewer"
+                            ]
+                        }
+                    }
+                }
             },
-            "bob": {
-              "roles": [
-                "Viewer"
-              ]
+            "db": {
+                "[production]": {
+                    "kind": "hana-cloud",
+                    "model": [
+                        "db/data-config",
+                        "db/data-test"
+                    ]
+                },
+                "[development]": {
+                    "kind": "sql",
+                    "model": [
+                        "db/data-config",
+                        "db/data-test"
+                    ]
+                },
+                "model": [
+                    "db",
+                    "srv"
+                ]
+            },
+            "API_SALES_ORDER_SRV": {
+                "kind": "odata-v2",
+                "model": "srv/external/API_SALES_ORDER_SRV",
+                "credentials": {
+                    "[production]": {
+                        "destination": "CapApplication-API_SALES_ORDER_SRV",
+                        "path": "s4hanacloud/sap/opu/odata/sap/API_SALES_ORDER_SRV"
+                    },
+                    "[development]": {
+                        "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_SALES_ORDER_SRV"
+                    }
+                }
             }
-          }
         }
-      }
-      ,
-      "db": {
-        "[production]": {
-          "kind": "hana-cloud"
-          ,"model": [
-            "db/data-config",
-            "db/data-test"
-          ]
-        },
-        "[development]": {
-          "kind": "sql"
-          ,"model": [
-            "db/data-config",
-            "db/data-test"
-          ]
-        },
-        "model": [
-          "db",
-          "srv"
-        ]
-      }
-      ,
-      "API_SALES_ORDER_SRV": {
-        "kind": "odata-v2",
-        "model": "srv/external/API_SALES_ORDER_SRV",
-        "credentials": {
-          "[production]": {
-            "destination": "CapApplication-API_SALES_ORDER_SRV",
-            "path": "s4hanacloud/sap/opu/odata/sap/API_SALES_ORDER_SRV"
-          },
-          "[development]": {
-            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_SALES_ORDER_SRV"
-          }
-        }
-      }
     }
-  }
 }
